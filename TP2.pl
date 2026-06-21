@@ -150,7 +150,6 @@ esFormulaValida(F1 > F2, Valuación) :-
     esFormulaValida(F1, Valuación),
     esFormulaValida(F2, Valuación).
 
-
 %------------ Ejercicio 5 ------------------------------------------------------
 
 % modelo(+Fórmula, -Valuación)
@@ -162,7 +161,20 @@ modelo(Fórmula, Valuación) :-
 %------------ Ejercicio 6 ------------------------------------------------------
 
 % mejorModelo(+Fórmula, -Valuación)
-mejorModelo(Fórmula, Valuación) :- completar("Ejercicio 6").
+mejorModelo(Fórmula, Valuación) :- 
+    modelo(Fórmula, Valuación),
+    cantidadDeVariablesVerdaderas(Valuación, Cantidad),
+    not((modelo(Fórmula, Valuación2),
+        cantidadDeVariablesVerdaderas(Valuación2, Cantidad2),
+        Cantidad2 > Cantidad)).
+
+% cantidadDeVariablesVerdaderas(+Modelo, -Cantidad)
+cantidadDeVariablesVerdaderas([], 0).
+cantidadDeVariablesVerdaderas([(_, t) | XS], C) :- 
+    cantidadDeVariablesVerdaderas(XS, SubC),
+    C is SubC + 1.
+cantidadDeVariablesVerdaderas([(_, f) | XS], C) :- 
+    cantidadDeVariablesVerdaderas(XS, C).
 
 %------------ Ejercicio 7 ------------------------------------------------------
 
