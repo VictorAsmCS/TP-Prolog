@@ -41,7 +41,7 @@ condicional(cuando).
 consecuente(entonces).
 consecuente(luego).
 
-%----------- Operadores (para hacer más legible una formula proposicional) -----
+%----------- Operadores (para hacer mas legible una formula proposicional) -----
 :- op(900, yfx, >).         % implicación
 :- op(800, yfx, &).         % conjunción
 :- op(750,  fy, ~).         % negación
@@ -179,10 +179,14 @@ cantidadDeVariablesVerdaderas([(_, f) | XS], C) :-
 %------------ Ejercicio 7 ------------------------------------------------------
 
 % subvaluación(+Valuación1, +Valuación2)
-subvaluación(Valuación1, Valuación2) :- completar("Ejercicio 7").
+subvaluación([],_).
+subvaluación([(X,V), XS], Valuación2) :- member((X,V), Valuación2), subvaluación(XS, Valuación2) .
 
 % extiende(+Valuación1, +Fórmula, -Valuación2)
-extiende(Valuación1, Fórmula, Valuación2) :- completar("Ejercicio 7").
+extiende(Valuación1, Fórmula, Valuación2) :- subvaluación(Valuación1, Valuación2), modelo(Formula, Valuación2).
+
+%------------ Ejercicio 8 ------------------------------------------------------
+"Si es reversible, porque si Valuacion1 no fuera definida, el resultado de subvaluacion(-Valuacion1,+Valuación2) serian todas las subvaluaciones posibles de Valuación2"
 
 %------------ Ejercicio 9 ------------------------------------------------------
 
