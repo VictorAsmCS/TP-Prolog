@@ -213,60 +213,93 @@ contiene_soluciones(Resultados, Soluciones) :- maplist(existe_resultado_igual(Re
 
 % Se espera que completen con las subsecciones de tests que crean necesarias, más allá de las puestas en estos ejemplos
 
-cantidadTestsParsea(4). % Actualizar con la cantidad de tests que entreguen
+cantidadTestsParsea(11).
 testParsea(1) :- parsea([si, una, persona, hechiza, a, una, gaviota, entonces, un, alfajor, hechiza, a, una, mermelada], persona & (hechiza & gaviota) > alfajor & (hechiza & mermelada)).
-testParsea(2) :- parsea([si, una, persona, hechiza, a, una, gaviota, entonces, un, alfajor, hechiza, a, un, iglu], persona & (hechiza & gaviota) > alfajor & (hechiza & iglu)).
-testParsea(3) :- parsea([si, una, persona, hechiza, a, una, gaviota, entonces, un, alfajor, hechiza, a, un, pitufo], persona & (hechiza & gaviota) > alfajor & (hechiza &pitufo)).
+testParsea(2) :- parsea([si, una, persona, hechiza, a, una, gaviota, entonces, un, alfajor, hechiza, a, un, iglú], persona & (hechiza & gaviota) > alfajor & (hechiza & iglú)).
+testParsea(3) :- parsea([si, una, persona, hechiza, a, una, gaviota, entonces, un, alfajor, hechiza, a, un, pitufo], persona & (hechiza & gaviota) > alfajor & (hechiza & pitufo)).
 testParsea(4) :- parsea([matilde, no, hechiza, a, una, gaviota], matilde & ~(hechiza & gaviota)).
-% % Agregar más tests
+testParsea(5) :- parsea([un, pitufo, come], pitufo & come).
+testParsea(6) :- parsea([una, persona, niAhí, admira, a, alonso], persona & ~(admira & alonso)).
+testParsea(7) :- parsea([cuando, doctorDoom, no, estudia, luego, matilde, vuela], (doctorDoom & ~estudia) > (matilde & vuela)).
+testParsea(8) :- parsea([si, un, iglú, niAhí, vuela, entonces, una, mermelada, molesta, a, charlyGarcía], (iglú & ~vuela) > (mermelada & (molesta & charlyGarcía))).
+testParsea(9) :- not(parsea([el, pitufo, come], _)). % "el" no esta en la gramatica
+testParsea(10) :- not(parsea([un, pitufo, a, come], _)). % mal uso preposicion
+testParsea(11) :- parsea([charlyGarcía, come], charlyGarcía & come).
 
-cantidadTestsVariables(1). % Actualizar con la cantidad de tests que entreguen
+cantidadTestsVariables(6).
 testVariables(1) :- findall(V, variables(persona & (hechiza & gaviota) > alfajor & (hechiza & mermelada), V), Vs), length(Vs, 1), contiene_soluciones(Vs, [[persona, hechiza, gaviota, alfajor, mermelada]]).
-% Agregar más tests
+testVariables(2) :- findall(V, variables(~a & (b > (~a & c)), V), Vs), length(Vs, 1), contiene_soluciones(Vs, [[a, b, c]]).
+testVariables(3) :- findall(V, variables(pitufo, V), Vs), length(Vs, 1), contiene_soluciones(Vs, [[pitufo]]).
+testVariables(4) :- findall(V, variables(a > a, V), Vs), length(Vs, 1), contiene_soluciones(Vs, [[a]]).
+testVariables(5) :- findall(V, variables(a & (b & (c & (d & e))), V), Vs), length(Vs, 1), contiene_soluciones(Vs, [[a, b, c, d, e]]).
+testVariables(6) :- findall(V, variables(~(~a), V), Vs), length(Vs, 1), contiene_soluciones(Vs, [[a]]).
 
-cantidadTestsValuación(1). % Actualizar con la cantidad de tests que entreguen
+cantidadTestsValuación(4).
 testValuación(1) :- findall(V, valuación([mermelada, gaviota], V), Vs), length(Vs, 4), contiene_soluciones(Vs, [[(mermelada, t), (gaviota, t)], [(mermelada, t), (gaviota, f)], [(mermelada, f), (gaviota, t)], [(mermelada, f), (gaviota, f)]]).
-% Agregar más tests
+testValuación(2) :- findall(V, valuación([a], V), Vs), length(Vs, 2), contiene_soluciones(Vs, [[(a, t)], [(a, f)]]).
+testValuación(3) :- findall(V, valuación([], V), Vs), length(Vs, 1), contiene_soluciones(Vs, [[]]).
+testValuación(4) :- findall(V, valuación([a, b, c], V), Vs), length(Vs, 8).
 
-cantidadTestsEsVálida(2). % Actualizar con la cantidad de tests que entreguen
+cantidadTestsEsVálida(7).
 testEsVálida(1) :- not(esVálida(persona & (hechiza & gaviota), [(persona, f), (hechiza, t), (gaviota, f)])).
 testEsVálida(2) :- esVálida(gaviota, [(gaviota, t)]).
-% Agregar más tests
+testEsVálida(3) :- esVálida(a > b, [(a, f), (b, f)]).
+testEsVálida(4) :- esVálida(a > b, [(a, t), (b, t)]).
+testEsVálida(5) :- not(esVálida(a > b, [(a, t), (b, f)])).
+testEsVálida(6) :- esVálida(~(~a), [(a, t)]).
+testEsVálida(7) :- esVálida(a > a, [(a, f)]).
 
-cantidadTestsModelo(1). % Actualizar con la cantidad de tests que entreguen
+cantidadTestsModelo(4).
 testModelo(1) :- findall(M, modelo(gaviota > mermelada, M), Ms), length(Ms, 3), contiene_soluciones(Ms, [[(gaviota, t), (mermelada, t)], [(gaviota, f), (mermelada, t)], [(gaviota, f), (mermelada, f)]]).
-% Agregar más tests
+testModelo(2) :- findall(M, modelo(~a & a, M), Ms), length(Ms, 0).
+testModelo(3) :- findall(M, modelo(a > a, M), Ms), length(Ms, 2), contiene_soluciones(Ms, [[(a, t)], [(a, f)]]).
+testModelo(4) :- findall(M, modelo(~(a & b), M), Ms), length(Ms, 3), contiene_soluciones(Ms, [[(a, t), (b, f)], [(a, f), (b, t)], [(a, f), (b, f)]]).
 
-cantidadTestsMejorModelo(2). % Actualizar con la cantidad de tests que entreguen
+cantidadTestsMejorModelo(5).
 testMejorModelo(1) :- findall(M, mejorModelo(~a > a, M), Ms), length(Ms, 1), contiene_soluciones(Ms, [[(a, t)]]).
 testMejorModelo(2) :- findall(M, mejorModelo(~(~a & b) > (a & ~b), M), Ms), length(Ms, 2), contiene_soluciones(Ms, [[(a, t), (b, f)], [(a, f), (b, t)]]).
-% Agregar más tests
+testMejorModelo(3) :- findall(M, mejorModelo(a & b, M), Ms), length(Ms, 1), contiene_soluciones(Ms, [[(a, t), (b, t)]]).
+testMejorModelo(4) :- findall(M, mejorModelo(~(a & b), M), Ms), length(Ms, 2), contiene_soluciones(Ms, [[(a, t), (b, f)], [(a, f), (b, t)]]).
+testMejorModelo(5) :- findall(M, mejorModelo(~a & ~b, M), Ms), length(Ms, 1), contiene_soluciones(Ms, [[(a, f), (b, f)]]).
 
-cantidadTestsSubvaluación(2). % Actualizar con la cantidad de tests que entreguen
+cantidadTestsSubvaluación(5).
 testSubvaluación(1) :- subvaluación([(gaviota, t)], [(gaviota, t), (mermelada, f)]).
 testSubvaluación(2) :- not(subvaluación([(gaviota, t)], [(gaviota, f), (mermelada, f)])).
-% Agregar más tests
+testSubvaluación(3) :- subvaluación([], [(a, t)]).
+testSubvaluación(4) :- not(subvaluación([(a, t)], [(a, f)])).
+testSubvaluación(5) :- subvaluación([(a, t)], [(a, t)]).
 
-cantidadTestsExtiende(2). % Actualizar con la cantidad de tests que entreguen
+cantidadTestsExtiende(4).
 testExtiende(1) :- findall(V, extiende([(a,t)], ~a > b, V), Vs), length(Vs, 2), contiene_soluciones(Vs, [[(a, t), (b, t)], [(a, t), (b, f)]]).
 testExtiende(2) :- findall(V, extiende([(a,f)], ~a > b, V), Vs), length(Vs, 1), contiene_soluciones(Vs, [[(a, f), (b, t)]]).
-% Agregar más tests
+testExtiende(3) :- findall(V, extiende([(a, t)], a & ~a, V), Vs), length(Vs, 0).
+testExtiende(4) :- findall(V, extiende([], a > b, V), Vs), length(Vs, 3).
 
-cantidadTestsConsecuencia(1). % Actualizar con la cantidad de tests que entreguen
-testConsecuencia(1).
-% Agregar más tests
+cantidadTestsConsecuencia(6).
+testConsecuencia(1) :- consecuencia(a, a).
+testConsecuencia(2) :- consecuencia(a & b, a).
+testConsecuencia(3) :- not(consecuencia(a, a & b)).
+testConsecuencia(4) :- not(consecuencia(a, a > b)).
+testConsecuencia(5) :- consecuencia(a, b > a).
+testConsecuencia(6) :- consecuencia(~a & a, b).
 
-cantidadTestsEquivalentes(1). % Actualizar con la cantidad de tests que entreguen
-testEquivalentes(1).
-% Agregar más tests
+cantidadTestsEquivalentes(4).
+testEquivalentes(1) :- equivalentes(a, a).
+testEquivalentes(2) :- equivalentes(~(~a), a).
+testEquivalentes(3) :- equivalentes(a > b, ~(a & ~b)).
+testEquivalentes(4) :- not(equivalentes(a & b, a)).
 
-cantidadTestsContradictorias(1). % Actualizar con la cantidad de tests que entreguen
-testContradictorias(1).
-% Agregar más tests
+cantidadTestsContradictorias(4).
+testContradictorias(1) :- contradictorias(a, ~a).
+testContradictorias(2) :- contradictorias(a & b, ~(a & b)).
+testContradictorias(3) :- not(contradictorias(a, b)).
+testContradictorias(4) :- contradictorias(a > b, a & ~b).
 
-cantidadTestsModeloÚnico(1). % Actualizar con la cantidad de tests que entreguen
-testModeloÚnico(1).
-% Agregar más tests
+cantidadTestsModeloÚnico(4).
+testModeloÚnico(1) :- modeloÚnico(a, [(a, t)]).
+testModeloÚnico(2) :- modeloÚnico(a & b, [(a, t), (b, t)]).
+testModeloÚnico(3) :- not(modeloÚnico(a > b, _)).
+testModeloÚnico(4) :- not(modeloÚnico(a & ~a, _)).
 
 tests(parsea) :- cantidadTestsParsea(M), forall(between(1,M,N), testParsea(N)).
 tests(variables) :- cantidadTestsVariables(M), forall(between(1,M,N), testVariables(N)).
