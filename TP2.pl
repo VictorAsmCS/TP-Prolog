@@ -180,13 +180,15 @@ cantidadDeVariablesVerdaderas([(_, f) | XS], C) :-
 
 % subvaluación(+Valuación1, +Valuación2)
 subvaluación([],_).
-subvaluación([(X,V), XS], Valuación2) :- member((X,V), Valuación2), subvaluación(XS, Valuación2) .
+subvaluación([(X,V)| XS], Valuación2) :- member((X,V), Valuación2), subvaluación(XS, Valuación2) .
 
 % extiende(+Valuación1, +Fórmula, -Valuación2)
-extiende(Valuación1, Fórmula, Valuación2) :- subvaluación(Valuación1, Valuación2), modelo(Formula, Valuación2).
+extiende(Valuación1, Fórmula, Valuación2) :- subvaluación(Valuación1, Valuación2), modelo(Fórmula, Valuación2).
 
 %------------ Ejercicio 8 ------------------------------------------------------
-"Si es reversible, porque si Valuacion1 no fuera definida, el resultado de subvaluacion(-Valuacion1,+Valuación2) serian todas las subvaluaciones posibles de Valuación2"
+"Si es reversible, porque si Valuacion1 no fuera definida, 
+el resultado de subvaluacion(-Valuacion1,+Valuación2) serian todas 
+las subvaluaciones posibles de Valuación2"
 
 %------------ Ejercicio 9 ------------------------------------------------------
 
@@ -194,7 +196,7 @@ extiende(Valuación1, Fórmula, Valuación2) :- subvaluación(Valuación1, Valua
 consecuencia(Fórmula1, Fórmula2) :- completar("Ejercicio 9").
 
 % equivalentes(+Formula1, +Fórmula2)
-equivalentes(Fórmula1, Fórmula2) :- completar("Ejercicio 9").
+equivalentes([(X,V)|XS], Fórmula2) :- length(Fórmula1,L1), length(Fórmula2,L2), L1 == L2, member((X,V),Fórmula2), equivalentes(XS,Fórmula2).
 
 % contradictorias(+Fórmula1, +Fórmula2)
 contradictorias(Fórmula1, Fórmula2) :- completar("Ejercicio 9").
