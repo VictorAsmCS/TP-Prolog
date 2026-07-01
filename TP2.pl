@@ -191,16 +191,20 @@ extiende(Valuación1, Fórmula, Valuación2) :- subvaluación(Valuación1, Valua
 %------------ Ejercicio 9 ------------------------------------------------------
 
 % consecuencia(+Fórmula1, +Fórmula2)
-consecuencia(Fórmula1, Fórmula2) :- completar("Ejercicio 9").
+consecuencia(Fórmula1, Fórmula2) :- not((modelo(Fórmula1, V), not(esVálida(Fórmula2, V))))
 
 % equivalentes(+Formula1, +Fórmula2)
-equivalentes(Fórmula1, Fórmula2) :- completar("Ejercicio 9").
+equivalentes(Fórmula1, Fórmula2) :- 
+    consecuencia(Fórmula1, Fórmula2)    
+    consecuencia(Fórmula2, Fórmula1)
 
 % contradictorias(+Fórmula1, +Fórmula2)
-contradictorias(Fórmula1, Fórmula2) :- completar("Ejercicio 9").
+contradictorias(Fórmula1, Fórmula2) :- not((modelo(Fórmula1, V), esVálida(Fórmula2, V)))
 
 % modeloÚnico(+Fórmula, -Valuación)
-modeloÚnico(Fórmula, Valuación) :- completar("Ejercicio 9").
+modeloÚnico(Fórmula, Valuación) :- 
+    modelo(Fórmula, V),
+    not((modelo(F, V2), V2 \= V))
 
 
 %%%%%%%%%%%
