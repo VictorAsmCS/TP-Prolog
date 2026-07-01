@@ -180,13 +180,15 @@ cantidadDeVariablesVerdaderas([(_, f) | XS], C) :-
 
 % subvaluación(+Valuación1, +Valuación2)
 subvaluación([],_).
-subvaluación([(X,V), XS], Valuación2) :- member((X,V), Valuación2), subvaluación(XS, Valuación2) .
+subvaluación([(X,V)| XS], Valuación2) :- member((X,V), Valuación2), subvaluación(XS, Valuación2) .
 
 % extiende(+Valuación1, +Fórmula, -Valuación2)
-extiende(Valuación1, Fórmula, Valuación2) :- subvaluación(Valuación1, Valuación2), modelo(Formula, Valuación2).
+extiende(Valuación1, Fórmula, Valuación2) :- subvaluación(Valuación1, Valuación2), modelo(Fórmula, Valuación2).
 
 %------------ Ejercicio 8 ------------------------------------------------------
-"Si es reversible, porque si Valuacion1 no fuera definida, el resultado de subvaluacion(-Valuacion1,+Valuación2) serian todas las subvaluaciones posibles de Valuación2"
+"Si es reversible, porque si Valuacion1 no fuera definida, 
+el resultado de subvaluacion(-Valuacion1,+Valuación2) serian todas 
+las subvaluaciones posibles de Valuación2"
 
 %------------ Ejercicio 9 ------------------------------------------------------
 
