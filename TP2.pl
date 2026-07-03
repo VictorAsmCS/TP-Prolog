@@ -237,15 +237,12 @@ modeloÚnico(Fórmula, Valuación) :-
 %% TESTS %%
 %%%%%%%%%%%
 
-% auxiliares para armar y chequear resultados de findall
+% Funciones auxiliares para armar y validar resultados de findall
 listasIguales(L1, L2) :- msort(L1, M), msort(L2, M).
 estaEnLosResultados(Resultados, Esperado) :- member(R, Resultados), listasIguales(R, Esperado).
 tieneEstosResultados(Resultados, Esperados) :- maplist(estaEnLosResultados(Resultados), Esperados).
 
-sinDuplicados(L) :-
-    length(L, N),
-    list_to_set(L, S),
-    length(S, N).
+sinDuplicados(L) :- length(L, N), list_to_set(L, S), length(S, N).
 
 % Se espera que completen con las subsecciones de tests que crean necesarias, más allá de las puestas en estos ejemplos
 
